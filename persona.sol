@@ -14,10 +14,9 @@ contract Identity {
 
     event onResult(uint resultType, string resultMsg);
 
-    function Identity(string _idType, address _defaultVEContract, bytes _idData) {
+    function Identity(string _idType, address _defaultVEContract) {
         owner = tx.origin;
         idType = _idType;
-        idData = _idData;
 
         VEContractIndex = 1;
         VEAdmins[0x63ad0cb91d02c91b9392d1af58c87e282238a3a6] = VEContractIndex;
@@ -42,20 +41,9 @@ contract Identity {
         }
     }
 
-    function setVE(address accountAddress, address veContractAddress, uint state) {
+    function setVE(address veContractAddress) {
         if (VEAdmins[tx.origin] == 1) {
             uint index = VEContractIndexMap[veContractAddress];
-            if (index > 0) {
-                if (state == 0) {
-                    VEAdmins[accountAddress] = 0;
-                } else if (state == 1) {
-                    VEAdmins[accountAddress] = index;
-                }
-            } else {
-                ++VEContractIndex;
-                VEAdmins[accountAddress] = VEContractIndex;
-                VEContracts[VEContractIndex] = veContractAddress;
-            }
         }
     }
 
